@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+  istoreservice:
+    build:
+      context: ./
+      dockerfile: ./iStore/Dockerfile
+
+    image: istore_service_image:latest
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    networks:
+      - todo_network
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ross
+      POSTGRES_PASSWORD: "0000"
+      POSTGRES_DB: store
+    ports:
+      - 5432:5432
+    networks:
+      - todo_network
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+networks:
+  todo_network:
+    driver: bridge
+    name: todo_network
